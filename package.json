@@ -1,24 +1,21 @@
 {
-  "name": "fullstack",
+  "name": "confusion",
   "version": "1.0.0",
-  "description": "Full Stack Course",
+  "description": "This is a website for Ristorante Con Fusion",
   "main": "index.html",
   "scripts": {
-	"start": "npm run lite",
+    "start": "npm run lite",
     "test": "echo \"Error: no test specified\" && exit 1",
-	"lite": "lite-server"
+    "lite": "lite-server"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DhammaWays/fullstack.git"
-  },
-  "author": "Lekhraj",
+  "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/DhammaWays/fullstack/issues"
-  },
-  "homepage": "https://github.com/DhammaWays/fullstack#readme",
   "devDependencies": {
-    "lite-server": "^2.6.1"
+    "lite-server": "^2.3.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.2.0",
+    "jquery": "^3.6.1",
+    "popper.js": "^1.16.1"
   }
 }
