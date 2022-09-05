@@ -34,14 +34,19 @@
    </nav>
     <header class="jumbotron">
         <div class="container">
-            <div class="row row-header">
+            <div class="row row-header align-items-center">
                 <div class="col-12 col-sm-6">
                     <h1>Ristorante con Fusion</h1>
                     <p>We take inspiration from the World's best cuisines, and create a unique fusion experience. Our lipsmacking creations will tickle your culinary senses!</p>
                 </div>
-                <div class="col-12 col-sm align-self-center">
+		<div class="col-12 col-sm-3 align-self-center">
 		  <img src="img/logo.png" class="img-fluid">
-                </div>
+		 </div>
+		<div class="col align-self-center">
+		  <a class="d-grid col-9" href="#reservetablecard" style="text-decoration: none">
+		     <button class="btn btn-sm btn-warning btn-block" type="button">Reserve Table</button>
+		  </a>
+		</div>
             </div>
         </div>
     </header>
@@ -67,8 +72,13 @@
                 <h3>This Month's Promotions</h3>
             </div>
             <div class="col col-sm col-md">
-                <h2>Weekend Grand Buffet</h2>
-                <p class="d-none d-sm-block">Featuring mouthwatering combinations with a choice of five different salads, six enticing appetizers, six main entrees and five choicest desserts. Free flowing bubbly and soft drinks. All for just $19.99 per person </p>
+	      <div class="media d-flex">
+		<div class="media-body">
+                  <h2 class="mt-0">Weekend Grand Buffet <span class="badge bg-danger">NEW</span></h2>
+                  <p class="d-none d-sm-block">Featuring mouthwatering combinations with a choice of five different salads, six enticing appetizers, six main entrees and five choicest desserts. Free flowing bubbly and soft drinks. All for just $19.99 per person </p>
+		</div>
+		<img class="d-flex ml-3 ms-2 img-thumbnail align-self-center" src="img/buffet.png" alt="Buffet">
+              </div>
             </div>
         </div>
 
@@ -89,6 +99,50 @@
         </div>
     </div>
 
+    <div class="row row-content justify-content-center" id="reservetablecard">
+      <div class="col-12 col-sm-8">
+	<div class="card mx-auto">
+	  <h3 class="card-header bg-warning text-white">Reserve a Table</h3>
+	  <div class="card-body">
+              <form id="reservetableform">
+		<div class="form-group row">
+		  <label for="numberofguests" class="col-sm-2 col-form-label">Number of Guests</label>
+		  <div class="col align-self-center">
+		    <input type="radio" id="guests1" name="guests" value="guests">
+		    <label for="guests1">1</label>
+		    <input type="radio" id="guests2" name="guests" value="guests">
+		    <label for="guests2">2</label>
+		    <input type="radio" id="guests3" name="guests" value="guests">
+		    <label for="guests3">3</label>
+		    <input type="radio" id="guests4" name="guests" value="guests">
+		    <label for="guests4">4</label>
+		    <input type="radio" id="guests5" name="guests" value="guests">
+		    <label for="guests5">5</label>
+		    <input type="radio" id="guests6" name="guests" value="guests">
+		    <label for="guests6">6</label>
+		  </div>
+		</div>
+		<div class="form-group row">
+		  <label for="dateandtime" class="col-sm-2 col-form-label">Date and Time</label>
+		  <div class="col align-self-center">
+		    <input type="date" class="form-control" id="date" name="date" placeholder="Date"></input>
+		  </div>
+		  <div class="col align-self-center">
+		    <input type="time" class="form-control" id="time" name="time" placeholder="Time"></input>
+		  </div>
+		</div>
+		<div class="form-group row">
+		  <div class="col-sm offset-sm-2">
+		    <button type="submit" class="btn btn-primary">Reserve</button>
+		  </div>
+		</div>
+	      </form>
+	  </div>
+	</div>	    	
+      </div>
+    </div>
+
+    
     <footer class="footer">
         <div class="container">
             <div class="row">             
