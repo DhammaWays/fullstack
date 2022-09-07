@@ -75,7 +75,75 @@
             </div>
         </div>
     </div>
-  
+
+    <!-- Reserve Table Modal -->
+    
+    <div id="reservetableModal" class="modal fade" role="dialog">
+      <div class="modal-dialog" role="content">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Reserve a Table</h4>
+            <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+	    <div class="col-12 col-sm-11">
+              <form id="reservetableform">
+                <div class="form-group row">
+		  <label for="numberofguests" class="col-sm-3 col-form-label">Number of Guests</label>
+		  <div class="col align-self-center">
+		    <div class="btn-group" role="group">		      
+		      <input type="radio" id="guests1" name="guests" value="guests">
+		      <label for="guests1">1</label>
+		      <input type="radio" id="guests2" name="guests" value="guests">
+		      <label for="guests2">2</label>
+		      <input type="radio" id="guests3" name="guests" value="guests">
+		      <label for="guests3">3</label>
+		      <input type="radio" id="guests4" name="guests" value="guests">
+		      <label for="guests4">4</label>
+		      <input type="radio" id="guests5" name="guests" value="guests">
+		      <label for="guests5">5</label>
+		      <input type="radio" id="guests6" name="guests" value="guests">
+		      <label for="guests6">6</label>
+		    </div>
+		  </div>
+                </div>
+                <div class="form-group row">
+		  <label for="section" class="col-sm-3 col-form-label">Section</label>
+		  <div class="col align-self-center">
+		    <div class="btn-group btn-group-toggle" role="group" data-bs-toggle="buttons">
+		      <input type="radio" class="btn-check" id="NonSmoking" name="section" value="Non-Smoking" checked>
+		      <label class="btn btn-success active" for="NonSmoking">Non-Smoking</label>
+		      <input type="radio" class="btn-check" id="Smoking" name="section" value="Smoking">
+		      <label  class="btn btn-danger" for="Smoking">Smoking</label>
+		    </div>
+		  </div>
+		</div>			
+		<div class="form-group row">
+		  <label for="dateandtime" class="col-sm-3 col-form-label">Date and Time</label>
+		  <div class="col align-self-center">
+		    <div class="btn-group" role="group">
+		      <input type="date" class="form-control" id="date" name="date" placeholder="Date"></input>
+		      <input type="time" class="form-control" id="time" name="time" placeholder="Time"></input>
+		    </div>
+		  </div>
+		</div>
+		
+                <div class="form-group row">
+		  <div class="col-sm-auto offset-sm-3">
+                    <button type="button" class="btn btn-secondary btn-sm ml-auto" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm ml-1">Reserve</button>
+		  </div>
+                </div>
+              </form>
+	    </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+     <!-- Top banner -->
+     
     <header class="jumbotron">
         <div class="container">
             <div class="row row-header align-items-center">
@@ -87,19 +155,14 @@
 		  <img src="img/logo.png" class="img-fluid">
 		 </div>
 		<div class="col align-self-center">
-		  <!-- Earlier way of showing block button with a href to jumpto
-		  <a class="d-grid col-9" href="#reservetablecard" style="text-decoration: none">
-		    <button class="btn btn-sm btn-warning btn-block" type="button"
-			    data-bs-toggle="tooltip" data-html="true" title="<em>Call Us</em>">Reserve Table</button>
-		  </a>
-		  -->
                   <a role="button" class="btn btn-block nav-link btn-warning"
-                     data-bs-toggle="tooltip" data-bs-html="true"  title="Or Call us at <br><strong>+852 12345678</strong>"
-                     data-bs-placement="bottom" href="#reservetablecard">Reserve Table</a>
+                     data-bs-toggle="modal" data-bs-target="#reservetableModal">Reserve Table</a>
 		</div>
             </div>
         </div>
     </header>
+
+    <!-- Content -->
 
     <div class="container">
       <div class="row row-content">
@@ -191,49 +254,7 @@
         </div>
     </div>
 
-    <div class="row row-content justify-content-center" id="reservetablecard">
-      <div class="col-12 col-sm-8">
-	<div class="card mx-auto">
-	  <h3 class="card-header bg-warning text-white">Reserve a Table</h3>
-	  <div class="card-body">
-              <form id="reservetableform">
-		<div class="form-group row">
-		  <label for="numberofguests" class="col-sm-2 col-form-label">Number of Guests</label>
-		  <div class="col align-self-center">
-		    <input type="radio" id="guests1" name="guests" value="guests">
-		    <label for="guests1">1</label>
-		    <input type="radio" id="guests2" name="guests" value="guests">
-		    <label for="guests2">2</label>
-		    <input type="radio" id="guests3" name="guests" value="guests">
-		    <label for="guests3">3</label>
-		    <input type="radio" id="guests4" name="guests" value="guests">
-		    <label for="guests4">4</label>
-		    <input type="radio" id="guests5" name="guests" value="guests">
-		    <label for="guests5">5</label>
-		    <input type="radio" id="guests6" name="guests" value="guests">
-		    <label for="guests6">6</label>
-		  </div>
-		</div>
-		<div class="form-group row">
-		  <label for="dateandtime" class="col-sm-2 col-form-label">Date and Time</label>
-		  <div class="col align-self-center">
-		    <input type="date" class="form-control" id="date" name="date" placeholder="Date"></input>
-		  </div>
-		  <div class="col align-self-center">
-		    <input type="time" class="form-control" id="time" name="time" placeholder="Time"></input>
-		  </div>
-		</div>
-		<div class="form-group row">
-		  <div class="col-sm offset-sm-2">
-		    <button type="submit" class="btn btn-primary">Reserve</button>
-		  </div>
-		</div>
-	      </form>
-	  </div>
-	</div>	    	
-      </div>
-    </div>
-
+    <!-- Footer -->
     
     <footer class="footer">
         <div class="container">
@@ -282,15 +303,7 @@
     <!-- jQuery first, then Popper.js, then Bootstrap JS. -->
     <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
     <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    
-    <script>
-     
-      $(document).ready(function(){
-	  $('#tooltip').tooltip();     
-    </script>
-   
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>  
    
 </body>
 
