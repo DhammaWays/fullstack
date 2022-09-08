@@ -89,3 +89,21 @@ body{
     @include bottom-right();
     z-index: 1;
 }
+
+.modal-header {
+    background-color: $background-dark;
+    color:floralwhite;
+    button {
+	color: floralwhite;
+	background: transparent;
+	border: none;
+	font-family: Arial;
+	font-weight: bold;
+	font-size: 120%;
+   }
+}
+
+.modal-body {
+    background: $background-pale;    
+}
+    
