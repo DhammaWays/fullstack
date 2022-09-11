@@ -8,18 +8,18 @@ $background-pale: #D1C4E9;
 $carousel-item-height: 300px;
 
 // frequently used group properties
-mixin zero-margin ($pad-up-dn, $pad-left-right) {
+@mixin zero-margin ($pad-up-dn, $pad-left-right) {
     margin:0px auto;
     padding: $pad-up-dn $pad-left-right;
 }
 
-mixin top-left () {
+@mixin top-left () {
     position: absolute;
     top: 0;
     left: 0;
 }
 
-mixin bottom-right () {
+@mixin bottom-right () {
     position: absolute;
     right:0px;
     bottom: 0px;
@@ -79,7 +79,7 @@ body{
     .carousel-item {
         height: $carousel-item-height;
         img {
-	    .top-left();
+	    @include top-left();
             min-height: $carousel-item-height;
         }
     }
@@ -104,6 +104,7 @@ body{
 }
 
 .modal-body {
-    background: $background-pale;    
+    background: $background-pale;
 }
+
     
