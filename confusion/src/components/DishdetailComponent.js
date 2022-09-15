@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardImg, CardBody, CardTitle, CardText } from 'reactstrap';
 
+/* DishDetail: Pure (no state) Presentational component to render details of given dish */
 class DishDetail extends Component {
  
     renderDish(dish) {
@@ -20,6 +21,7 @@ class DishDetail extends Component {
     renderComments(comments) {
         if (comments != null) {
             var commentsList = comments.map((comment) => {
+                /* We use Date class to convert our datetime string to US style date: Oct 15, 2014 */
                 var date = new Date(comment.date).toDateString().split(' ');
                 return (
                     <ul key={comment.id} className="list-unstyled">
@@ -28,7 +30,6 @@ class DishDetail extends Component {
                     </ul >
                 );
             });
-
 
             return (
                 <div>
