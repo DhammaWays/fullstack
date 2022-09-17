@@ -4,9 +4,26 @@ import { Link } from 'react-router-dom';
 
 function About(props) {
 
+    function RenderLeader({ leader }) {
+        return (
+            <Media key={leader.id} className="d-flex">
+                <Media className="me-4">
+                    <Media object src={leader.image} alt={leader.name} />
+                </Media>
+                <Media body>
+                    <Media className="mt-o mb-1" heading>{leader.name}</Media>
+                    <h6 style={{ fontStyle: "italic" }}>{leader.designation}</h6>
+                    <p className="d-none d-sm-block mb-4">{leader.description}</p>
+                </Media>
+            </Media>
+        );
+    }
+
     const leaders = props.leaders.map((leader) => {
         return (
-            <p>Leader {leader.name}</p>
+            <div key={leader.id}>
+                <RenderLeader leader={leader} />
+            </div>
         );
     });
 
@@ -49,7 +66,7 @@ function About(props) {
                     <Card>
                         <CardBody className="bg-faded">
                             <blockquote className="blockquote">
-                                <p className="mb-0">You better cut the pizza in four pieces because
+                                <p className="mb-2">You better cut the pizza in four pieces because
                                     I'm not hungry enough to eat six.</p>
                                 <footer className="blockquote-footer">Yogi Berra,
                                     <cite title="Source Title">The Wit and Wisdom of Yogi Berra,

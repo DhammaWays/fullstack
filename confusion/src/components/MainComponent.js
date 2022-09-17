@@ -38,9 +38,9 @@ class Main extends Component {
              var { dishId } = useParams(); /* returns corresponding param as string */
              dishId = Number(dishId);
              const dish = this.state.dishes.filter((dish) => dish.id === dishId)[0];
-             const comment = this.state.comments.filter((comment) => comment.dishId === dishId);
+             const comments = this.state.comments.filter((comment) => comment.dishId === dishId);
              return (
-                 <DishDetail dish={dish} comment={comment} />
+                 <DishDetail dish={dish} comments={comments} />
              );
          }
 
@@ -49,9 +49,9 @@ class Main extends Component {
                 <Header />
                 <Routes>
                     <Route path='/home' element={<Home dish={featuredDish} promotion={featuredPromotion} leader={featuredLeader} />} />
-                    <Route exact path='/aboutus' element={<About />} />
-                   <Route path='/menu/:dishId' element={<DishWithId />} />
-                    <Route exact path='/menu' element={<Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />} />
+                    <Route exact path='/aboutus' element={<About leaders={this.state.leaders} />} />
+                    <Route path='/menu/:dishId' element={<DishWithId />} />
+                    <Route exact path='/menu' element={<Menu dishes={this.state.dishes} />} />
                     <Route exact path='/contactus' element={<Contact />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
