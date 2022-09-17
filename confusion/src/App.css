@@ -32,3 +32,11 @@ address {
 .navbar-dark {
     background-color: #512DA8;
 }
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-subtitle {
+    font-style: italic;
+}
