@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import Home from './HomeComponent';
 import Menu from './MenuComponent';
 import DishDetail from './DishdetailComponent';
 import Header from './HeaderComponent';
@@ -27,10 +29,13 @@ class Main extends Component {
     /* Pass "selected dish" as property to DishDetail component */
     render() {
         return (
-            <div className="App">
+            <div>
                 <Header />
-                <Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />
-                <DishDetail dish={this.state.dishes.filter((dish) => dish.id === this.state.selectedDish)[0]} />
+                <Routes>
+                    <Route path='/home' element={<Home />} />
+                    <Route exact path='/menu/*' element={<Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />} />
+                    <Route path="*" element={<Navigate to="/home" replace />} />
+                </Routes>
                 <Footer />
             </div>
         );
