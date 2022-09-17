@@ -1,7 +1,9 @@
 import { Component } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import Home from './HomeComponent';
+import About from './AboutComponent';
 import Menu from './MenuComponent';
+import DishDetail from './DishdetailComponent';
 import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
@@ -24,26 +26,33 @@ class Main extends Component {
             comments: COMMENTS,
             promotions: PROMOTIONS,
             leaders: LEADERS,
-            selectedDish: null
         }
-    }
-
-    onDishSelect(dishId) {
-        this.setState({ selectedDish: dishId });
     }
 
      render() {
         const featuredDish = this.state.dishes.filter((dish) => dish.featured)[0];
         const featuredPromotion = this.state.promotions.filter((leader) => leader.featured)[0];
         const featuredLeader = this.state.leaders.filter((promotion) => promotion.featured)[0];
-        
+
+         const DishWithId = () => {
+             var { dishId } = useParams(); /* returns corresponding param as string */
+             dishId = Number(dishId);
+             const dish = this.state.dishes.filter((dish) => dish.id === dishId)[0];
+             const comment = this.state.comments.filter((comment) => comment.dishId === dishId);
+             return (
+                 <DishDetail dish={dish} comment={comment} />
+             );
+         }
+
         return (
             <div>
                 <Header />
                 <Routes>
                     <Route path='/home' element={<Home dish={featuredDish} promotion={featuredPromotion} leader={featuredLeader} />} />
-                    <Route exact path='/menu/*' element={<Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />} />
-                    <Route eaxct path='/contactus/*' element={<Contact />} />
+                    <Route exact path='/aboutus' element={<About />} />
+                   <Route path='/menu/:dishId' element={<DishWithId />} />
+                    <Route exact path='/menu' element={<Menu dishes={this.state.dishes} onClick={(dishId) => this.onDishSelect(dishId)} />} />
+                    <Route exact path='/contactus' element={<Contact />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
                 <Footer />
