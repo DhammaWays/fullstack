@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Breadcrumb, BreadcrumbItem, Button, Form, FormGroup, Label, Input, Col } from 'reactstrap';
+import { Breadcrumb, BreadcrumbItem, Button, Form, FormGroup, Label, Input, Col, FormFeedback } from 'reactstrap';
 import { Link } from 'react-router-dom';
 
 class Contact extends Component {
@@ -12,11 +12,18 @@ class Contact extends Component {
             email: '',
             agree: false,
             contactType: 'Tel.',
-            message: ''
+            message: '',
+            touched: {
+                firstname: false,
+                lastname: false,
+                telnum: false,
+                email: false
+            }
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
     }
 
     handleInputChange(event) {
@@ -35,7 +42,43 @@ class Contact extends Component {
         event.preventDefault();
     }
 
+    handleBlur = (field) => (evt) => {
+        this.setState({
+            touched: { ...this.state.touched, [field]: true }
+        });
+    }
+
+    validate(firstname, lastname, telnum, email) {
+        const errors = {
+            firstname: '',
+            lastname: '',
+            telnum: '',
+            email: ''
+        };
+
+        if (this.state.touched.firstname && firstname.length < 2)
+            errors.firstname = 'First Name should be >= 2 characters';
+        else if (this.state.touched.firstname && firstname.length > 16)
+            errors.firstname = 'First Name should be <= 16 characters';
+
+        if (this.state.touched.lastname && lastname.length < 2)
+            errors.lastname = 'Last Name should be >= 2 characters';
+        else if (this.state.touched.lastname && lastname.length > 16)
+            errors.lastname = 'Last Name should be <= 16 characters';
+
+        const regTel = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
+        if (this.state.touched.telnum && !regTel.test(telnum))
+            errors.telnum = '10 digit Tel. Number should contain only numbers';
+
+        const regEmail = /^\w+[+.\w-]*@([\w-]+.)*\w+[\w-]*.([a-z]{2,4}|\d+)$/i;
+        if (this.state.touched.email && !regEmail.test(email))
+            errors.email = 'Email should be in format: username@domainname';
+
+        return errors;
+    }
+
     render() {
+        const errors = this.validate(this.state.firstname, this.state.lastname, this.state.telnum, this.state.email);
         const FormElem = (props) => {
             return (
                 <FormGroup row>
@@ -44,7 +87,11 @@ class Contact extends Component {
                         <Input type={props.type} id={props.name} name={props.name}
                             placeholder={props.label}
                             value={this.state[props.name]}
+                            valid={errors[props.name] === ''}
+                            invalid={errors[props.name] !== ''}
+                            onBlur={this.handleBlur(props.name)}
                             onChange={this.handleInputChange} />
+                        <FormFeedback>{errors[props.name]}</FormFeedback>
                     </Col>
                 </FormGroup>
             );
@@ -95,10 +142,14 @@ class Contact extends Component {
                     </div>
                     <div className="col-12 col-md-9">
                         <Form onSubmit={this.handleSubmit}>
-                            <FormElem type="text" name="firstname" label="First Name" />
-                            <FormElem type="text" name="lastname" label="Last Name" />
-                            <FormElem type="tel" name="telnum" label="Tel. Number" />
-                            <FormElem type="email" name="email" label="Email" />
+                            {/* Using it as component (instead of function call) will cause form to be rendered with each
+                             *  character being typed in input fields as this causes state change which signature for anonymous
+                             *  component also change, causing React to render the form again!
+                             * <FormElem type="text" name="lastname" label="Last Name" /> */}
+                            {FormElem({ type: "text", name: "firstname", label: "First Name" })}
+                            {FormElem({ type: "text", name: "lastname", label: "Last Name" })}
+                            {FormElem({ type: "tel", name: "telnum", label: "Tel. Number" })}
+                            {FormElem({ type: "email", name: "email", label: "Email" })}
                             <FormGroup row>
                                 <Col md={{ size: 6, offset: 2 }}>
                                     <FormGroup check>
