@@ -1,5 +1,7 @@
 import { Component } from 'react';
-import { Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams, useLocation, useNavigate } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 import Home from './HomeComponent';
 import About from './AboutComponent';
 import Menu from './MenuComponent';
@@ -7,51 +9,61 @@ import DishDetail from './DishdetailComponent';
 import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
-import { DISHES } from '../shared/dishes';
-import { COMMENTS } from '../shared/comments';
-import { PROMOTIONS } from '../shared/promotions';
-import { LEADERS } from '../shared/leaders';
 
+/* Create a wrapper function "withRouter" as it is deperacted in V6 */
+function withRouter(Component) {
+    function ComponentWithRouterProp(props) {
+        let location = useLocation();
+        let navigate = useNavigate();
+        let params = useParams();
+        return (
+            <Component
+                {...props}
+                router={{ location, navigate, params }}
+            />
+        );
+    }
+
+    return ComponentWithRouterProp;
+}
+
+const mapStateToProps = state => {
+    return {
+        dishes: state.dishes,
+        comments: state.comments,
+        promotions: state.promotions,
+        leaders: state.leaders
+    }
+}
 
 /* Main: Container component to manage overall presentation by using other presentation component
  * along with state and control logic.
  */
 class Main extends Component {
 
-    constructor(props) {
-        super(props);
+    render() {
+        const featuredDish = this.props.dishes.filter((dish) => dish.featured)[0];
+        const featuredPromotion = this.props.promotions.filter((leader) => leader.featured)[0];
+        const featuredLeader = this.props.leaders.filter((promotion) => promotion.featured)[0];
 
-        this.state = {
-            dishes: DISHES,
-            comments: COMMENTS,
-            promotions: PROMOTIONS,
-            leaders: LEADERS,
+        const DishWithId = () => {
+            var { dishId } = useParams(); /* returns corresponding param as string */
+            dishId = Number(dishId);
+            const dish = this.props.dishes.filter((dish) => dish.id === dishId)[0];
+            const comments = this.props.comments.filter((comment) => comment.dishId === dishId);
+            return (
+                <DishDetail dish={dish} comments={comments} />
+            );
         }
-    }
-
-     render() {
-        const featuredDish = this.state.dishes.filter((dish) => dish.featured)[0];
-        const featuredPromotion = this.state.promotions.filter((leader) => leader.featured)[0];
-        const featuredLeader = this.state.leaders.filter((promotion) => promotion.featured)[0];
-
-         const DishWithId = () => {
-             var { dishId } = useParams(); /* returns corresponding param as string */
-             dishId = Number(dishId);
-             const dish = this.state.dishes.filter((dish) => dish.id === dishId)[0];
-             const comments = this.state.comments.filter((comment) => comment.dishId === dishId);
-             return (
-                 <DishDetail dish={dish} comments={comments} />
-             );
-         }
 
         return (
             <div>
                 <Header />
                 <Routes>
                     <Route path='/home' element={<Home dish={featuredDish} promotion={featuredPromotion} leader={featuredLeader} />} />
-                    <Route exact path='/aboutus' element={<About leaders={this.state.leaders} />} />
+                    <Route exact path='/aboutus' element={<About leaders={this.props.leaders} />} />
                     <Route path='/menu/:dishId' element={<DishWithId />} />
-                    <Route exact path='/menu' element={<Menu dishes={this.state.dishes} />} />
+                    <Route exact path='/menu' element={<Menu dishes={this.props.dishes} />} />
                     <Route exact path='/contactus' element={<Contact />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
@@ -61,4 +73,4 @@ class Main extends Component {
     }
 }
 
-export default Main;
+export default withRouter(connect(mapStateToProps)(Main));
