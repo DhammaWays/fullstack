@@ -9,6 +9,7 @@ import DishDetail from './DishdetailComponent';
 import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
+import { addComment } from '../redux/ActionCreators';
 
 /* Create a wrapper function "withRouter" as it is deperacted in V6 */
 function withRouter(Component) {
@@ -26,6 +27,10 @@ function withRouter(Component) {
 
     return ComponentWithRouterProp;
 }
+
+const mapDispatchToProps = dispatch => ({
+    addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment))
+});
 
 const mapStateToProps = state => {
     return {
@@ -46,13 +51,13 @@ class Main extends Component {
         const featuredPromotion = this.props.promotions.filter((leader) => leader.featured)[0];
         const featuredLeader = this.props.leaders.filter((promotion) => promotion.featured)[0];
 
-        const DishWithId = () => {
+        const DishWithId = (props) => {
             var { dishId } = useParams(); /* returns corresponding param as string */
             dishId = Number(dishId);
             const dish = this.props.dishes.filter((dish) => dish.id === dishId)[0];
             const comments = this.props.comments.filter((comment) => comment.dishId === dishId);
             return (
-                <DishDetail dish={dish} comments={comments} />
+                <DishDetail dish={dish} comments={comments} addComment={props.addComment} />
             );
         }
 
@@ -62,7 +67,7 @@ class Main extends Component {
                 <Routes>
                     <Route path='/home' element={<Home dish={featuredDish} promotion={featuredPromotion} leader={featuredLeader} />} />
                     <Route exact path='/aboutus' element={<About leaders={this.props.leaders} />} />
-                    <Route path='/menu/:dishId' element={<DishWithId />} />
+                    <Route path='/menu/:dishId' element={<DishWithId addComment={this.props.addComment} />} />
                     <Route exact path='/menu' element={<Menu dishes={this.props.dishes} />} />
                     <Route exact path='/contactus' element={<Contact />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
@@ -73,4 +78,4 @@ class Main extends Component {
     }
 }
 
-export default withRouter(connect(mapStateToProps)(Main));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main));
