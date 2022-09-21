@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Breadcrumb, BreadcrumbItem, Button, Label, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
-import { Control, LocalForm, Errors } from 'react-redux-form';
+import { Control, Form, Errors } from 'react-redux-form';
 
 /* Validation functions */
 const required = (val) => val && val.length;
@@ -23,6 +23,7 @@ class Contact extends Component {
     handleSubmit(values) {
         console.log('Current State is: ' + JSON.stringify(values));
         alert('Current State is: ' + JSON.stringify(values));
+        this.props.resetFeedbackForm();
     }
 
     render() {
@@ -98,7 +99,7 @@ class Contact extends Component {
                         <h3>Send us your Feedback</h3>
                     </div>
                     <div className="col-12 col-md-9">
-                        <LocalForm onSubmit={this.handleSubmit}>
+                        <Form model="feedback" onSubmit={this.handleSubmit}>
                             {/* Using it as component (instead of function call) will cause form to be rendered with each
                              *  character being typed in input fields as this causes state change making signature for anonymous
                              *  component also change, causing React to render the form again!
@@ -143,7 +144,7 @@ class Contact extends Component {
                                     </Button>
                                 </Col>
                             </Row>
-                        </LocalForm>
+                        </Form>
                     </div>
                 </div>
             </div>

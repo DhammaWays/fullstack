@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { Routes, Route, Navigate, useParams, useLocation, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { actions } from 'react-redux-form';
 
 import Home from './HomeComponent';
 import About from './AboutComponent';
@@ -30,7 +31,8 @@ function withRouter(Component) {
 
 const mapDispatchToProps = dispatch => ({
     addComment: (dishId, rating, author, comment) => dispatch(addComment(dishId, rating, author, comment)),
-    fetchDishes: () => { dispatch(fetchDishes()) }
+    fetchDishes: () => { dispatch(fetchDishes()) },
+    resetFeedbackForm: () => { dispatch(actions.reset('feedback')) }
 });
 
 const mapStateToProps = state => {
@@ -76,7 +78,7 @@ class Main extends Component {
                     <Route exact path='/aboutus' element={<About leaders={this.props.leaders} />} />
                     <Route path='/menu/:dishId' element={<DishWithId addComment={this.props.addComment}  />} />
                     <Route exact path='/menu' element={<Menu dishes={this.props.dishes} />} />
-                    <Route exact path='/contactus' element={<Contact />} />
+                    <Route exact path='/contactus' element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
                 </Routes>
                 <Footer />
