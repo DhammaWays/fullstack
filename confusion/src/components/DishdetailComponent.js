@@ -48,7 +48,8 @@ class CommentForm extends Component {
 
     handleSumbit(values) {
         this.toggleModal();
-        this.props.addComment(this.props.dishId, values.rating, values.author, values.comment);
+        const data = { dishId: this.props.dishId, rating: values.rating, author: values.author, comment: values.comment };
+        this.props.addComment(data);
      }
 
     render() {
@@ -141,7 +142,7 @@ function RenderComments({ comments, addComment, dishId }) {
  */
 const DishDetail = (props) => {
     /* Use the "dish" property passed in if available */
-    if (props.isLoading) {
+    if (props.dishesLoading || props.commentsLoading ) {
         return (
             <div className="container">
                 <div className="row">
@@ -150,11 +151,11 @@ const DishDetail = (props) => {
             </div>
         );
     }
-    else if (props.errMess) {
+    else if (props.dishesErrMess || props.commentsErrMess) {
         return (
             <div className="container">
                 <div className="row">
-                    <h4>{props.errMess}</h4>
+                    <h4>{props.dishesErrMess + props.commentsErrMess}</h4>
                 </div>
             </div>
         );

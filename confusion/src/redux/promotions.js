@@ -1,3 +1,8 @@
+
+import { ActionTemplate } from './ActionTemplate';
+export const Promotions = ActionTemplate('promotions');
+
+/*
 import { PROMOTIONS } from '../shared/promotions';
 
 export const Promotions = (state = PROMOTIONS, action) => {
@@ -6,3 +11,7 @@ export const Promotions = (state = PROMOTIONS, action) => {
             return state;
     }
 };
+
+*/
+
+
