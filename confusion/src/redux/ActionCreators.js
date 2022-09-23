@@ -1,13 +1,15 @@
 import * as ActionTypes from './ActionTypes';
+import { baseUrl } from '../shared/baseUrl';
+
 /* import { DISHES } from '../shared/dishes'; */
 
-
+/*
 import * as DATA1 from '../shared/dishes';
 import * as DATA2 from '../shared/promotions';
 import * as DATA3 from '../shared/comments';
 
 const DATA = { ...DATA1, ...DATA2, ...DATA3 };
-
+*/
 /*
 export const addComment = (dishId, rating, author, comment) => ({
 	type: ActionTypes.ADD_COMMENT,
@@ -59,13 +61,11 @@ function creActions() {
 		const ent_tc = ent_lc.charAt(0).toUpperCase() + ent_lc.substring(1);
 		const ent_one = ent_tc.slice(0, -1); /* chop off last character, e.g. comments -> comment */
 
-
 		const entFetch = `fetch${ent_tc}`;
 		const entAdd = `add${ent_tc}`;
 		const entLoading = `${ent_lc}Loading`;
 		const entFailed = `${ent_lc}Failed`;
 		const entAddOne = `add${ent_one}`;
-
 
 		FETCH[entLoading] = () => ({
 			type: ActionTypes.ACT[`${ent_uc}_LOADING`]
@@ -82,11 +82,24 @@ function creActions() {
 		});
 
 		FETCH[entFetch] = () => (dispatch) => {
-			dispatch(FETCH[entLoading](true));
-
-			setTimeout(() => {
-				dispatch(FETCH[entAdd](DATA[ent_uc]));
-			}, 2000);
+			dispatch(FETCH[entLoading]());
+			return fetch(baseUrl + ent_lc )
+				.then(response => {
+					if (response.ok) { return response; }
+					else {
+						var error = new Error('Error ' + response.status + ': ' + response.statusText);
+						error.response = response;
+						throw error;
+						}
+					},
+					error => {
+						var errmess = new Error(error.message);
+						throw errmess;
+						}
+					)
+				.then(response => response.json())
+				.then(data => dispatch(FETCH[entAdd](data)))
+				.catch(error => dispatch(FETCH[entFailed](error.message)));
 		}
 
 		FETCH[entAddOne] = (data) => ({
