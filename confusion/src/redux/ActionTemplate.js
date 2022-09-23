@@ -20,7 +20,6 @@ export const ActionTemplate = (entity) => (state = {
         case ActionTypes.ACT[`ADD_${entOne}`]:
             var entry = action.payload;
             entry.id = state[entity].length;
-            entry.date = new Date().toISOString();
             return { ...state, [entity]: state[entity].concat(entry) };
 
         default:

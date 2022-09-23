@@ -31,13 +31,13 @@ function withRouter(Component) {
 }
 
 const mapDispatchToProps = dispatch => ({
-    addComment: (data) => dispatch(FETCH.addComment({ dishId: data.dishId, rating: data.rating, author: data.author, comment: data.comment })),
     fetchDishes: () => { dispatch(FETCH.fetchDishes()) },
     resetFeedbackForm: () => {
         dispatch(actions.reset('feedback'))
     },
     fetchPromotions: () => { dispatch(FETCH.fetchPromotions()) },
-    fetchComments: () => { dispatch(FETCH.fetchComments()) }
+    fetchComments: () => { dispatch(FETCH.fetchComments()) },
+    postComment: (data) => dispatch(FETCH.postComment({ dishId: data.dishId, rating: data.rating, author: data.author, comment: data.comment }))
 });
 
 const mapStateToProps = state => {
@@ -77,8 +77,8 @@ class Main extends Component {
             const dish = this.props.dishes.dishes.filter((dish) => dish.id === dishId)[0];
             const comments = this.props.comments.comments.filter((comment) => comment.dishId === dishId);
             return (
-                <DishDetail dish={dish} comments={comments} addComment={props.addComment} dishesLoading={loadingDishes} dishesErrMess={errLoadingDishes}
-                    commentsLoading={loadingComments} commentsErrMess={errLoadingComments}/>
+                <DishDetail dish={dish} comments={comments} postComment={props.postComment} dishesLoading={loadingDishes} dishesErrMess={errLoadingDishes}
+                    commentsLoading={loadingComments} commentsErrMess={errLoadingComments} />
             );
         }
 
@@ -90,7 +90,7 @@ class Main extends Component {
                         promotionLoading={loadingPromotion} promotionErrMess={errLoadingPromotion}
                     />} />
                     <Route exact path='/aboutus' element={<About leaders={this.props.leaders} />} />
-                    <Route path='/menu/:dishId' element={<DishWithId addComment={this.props.addComment}  />} />
+                    <Route path='/menu/:dishId' element={<DishWithId postComment={this.props.postComment} />} />
                     <Route exact path='/menu' element={<Menu dishes={this.props.dishes} />} />
                     <Route exact path='/contactus' element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
                     <Route path="*" element={<Navigate to="/home" replace />} />
