@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardImg, CardBody, CardTitle, CardText, Breadcrumb, BreadcrumbItem, Modal, ModalHeader, ModalBody, Label, Row, Col, Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { Control, LocalForm, Errors } from 'react-redux-form';
+import { FadeTransform, Fade, Stagger } from 'react-animation-components';
 
 import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
@@ -18,13 +19,15 @@ const minLength = (len) => (val) => val && (val.length >= len);
 function RenderDish({ dish }) {
     if (dish != null) {
         return (
-            <Card>
-                <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
-                <CardBody>
-                    <CardTitle>{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
+            <FadeTransform in transformProps={{ exitTransform: 'scale(0.5) translateY(-50%)' }}>
+                <Card>
+                    <CardImg width="100%" src={baseUrl + dish.image} alt={dish.name} />
+                    <CardBody>
+                        <CardTitle>{dish.name}</CardTitle>
+                        <CardText>{dish.description}</CardText>
+                    </CardBody>
+                </Card>
+            </FadeTransform>
         );
     }
 }
@@ -116,17 +119,21 @@ function RenderComments({ comments, postComment, dishId }) {
             /* We use Date class to convert our datetime string to US style date: Oct 15, 2014 */
             var date = new Date(comment.date).toDateString().split(' ');
             return (
-                <ul key={comment.id} className="list-unstyled">
-                    <li>{comment.comment}</li>
-                    <li>--{comment.author}, {date[1]} {date[2]}, {date[3]}</li>
-                </ul >
+                <Fade in>
+                    <ul key={comment.id} className="list-unstyled">
+                        <li>{comment.comment}</li>
+                        <li>--{comment.author}, {date[1]} {date[2]}, {date[3]}</li>
+                    </ul >
+                </Fade>
             );
         });
 
         return (
             <div>
                 <h4>Comments</h4>
-                {commentsList}
+                <Stagger in>
+                    {commentsList}
+                </Stagger>
                 <CommentForm dishId={dishId} postComment={postComment} />
             </div>
         );

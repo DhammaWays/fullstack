@@ -1,7 +1,8 @@
-import { Component } from 'react';
+import { Component, useRef } from 'react';
 import { Routes, Route, Navigate, useParams, useLocation, useNavigate } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { actions } from 'react-redux-form';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 import Home from './HomeComponent';
 import About from './AboutComponent';
@@ -19,10 +20,11 @@ function withRouter(Component) {
         let location = useLocation();
         let navigate = useNavigate();
         let params = useParams();
+        let nodeRef = useRef();
         return (
             <Component
                 {...props}
-                router={{ location, navigate, params }}
+                router={{ location, navigate, params, nodeRef }}
             />
         );
     }
@@ -85,16 +87,20 @@ class Main extends Component {
         return (
             <div>
                 <Header />
-                <Routes>
-                    <Route path='/home' element={<Home dish={featuredDish} promotion={featuredPromotion} leader={featuredLeader} dishesLoading={loadingDishes} dishesErrMess={errLoadingDishes} 
-                        promotionLoading={loadingPromotion} promotionErrMess={errLoadingPromotion}
-                    />} />
-                    <Route exact path='/aboutus' element={<About leaders={this.props.leaders} />} />
-                    <Route path='/menu/:dishId' element={<DishWithId postComment={this.props.postComment} />} />
-                    <Route exact path='/menu' element={<Menu dishes={this.props.dishes} />} />
-                    <Route exact path='/contactus' element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
-                    <Route path="*" element={<Navigate to="/home" replace />} />
-                </Routes>
+                <TransitionGroup>
+                    <CSSTransition nodeRef={this.props.nodeRef} classNames="page" timeout={300}>
+                        <Routes>
+                            <Route path='/home' element={<Home dish={featuredDish} promotion={featuredPromotion} leader={featuredLeader} dishesLoading={loadingDishes} dishesErrMess={errLoadingDishes}
+                                promotionLoading={loadingPromotion} promotionErrMess={errLoadingPromotion}
+                            />} />
+                            <Route exact path='/aboutus' element={<About leaders={this.props.leaders} />} />
+                            <Route path='/menu/:dishId' element={<DishWithId postComment={this.props.postComment} />} />
+                            <Route exact path='/menu' element={<Menu dishes={this.props.dishes} />} />
+                            <Route exact path='/contactus' element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+                            <Route path="*" element={<Navigate to="/home" replace />} />
+                        </Routes>
+                    </CSSTransition>
+                </TransitionGroup>
                 <Footer />
             </div>
         );
