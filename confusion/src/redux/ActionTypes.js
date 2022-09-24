@@ -1,9 +1,19 @@
-const entities = ['DISHES', 'COMMENTS', 'PROMOTIONS', 'LEADERS'];
+/*
+ * Templated code for creating action types for different entities for better resuse.
+ * Just add entity name (e.g.COMMENTS) in "entities".Function "genTypes"
+ * uses it to generate types for each entity and exports them in "ACT" object.
+ * 
+ * For example for "DISHES", it will generate type for following actions:
+ *      ADD_DISHES, DISHES_LOADING, DISHES_FAILED, ADD_DISH
+ * 
+ * They can be accessed by exported "ACT" object as: ACT.ADD_DISHES
+ */
+
+const entities = ['DISHES', 'COMMENTS', 'PROMOTIONS', 'LEADERS', 'FEEDBACKS'];
 export const ACT = {};
 
 /*
- * Generate different action types: ADD, LOADING, FAILED for each given entity
- * e.g. ADD_DISHES, DISHES_LOADING, DISHES_FAILED
+ * Generate different action types: ADD, LOADING, FAILED, etc for each given entity
  */
 function genTypes() {
     for (let i = 0; i < entities.length; i++) {
@@ -16,6 +26,4 @@ function genTypes() {
 }
 
 genTypes();
-/*
-export const ADD_COMMENT = 'ADD_COMMENT';
-*/
+console.log(ACT);

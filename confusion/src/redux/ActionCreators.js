@@ -1,58 +1,34 @@
+/*
+ * Templated code for action creators for different entities for better resuse.
+ * Just add entity name (e.g. COMMENTS) in "entities". Function "creActions"
+ * uses it to generate code for each action and exports them in "FETCH" object.
+ * 
+ * For example for "COMMENTS", it will generate functions for:
+ *		addComments, commentsLoading, commentsFailed, addComment, postComment
+ * 
+ *  They can be accessed by exported "FETCH" object: FETCH.addComments(data)
+ */
+
 import * as ActionTypes from './ActionTypes';
 import { baseUrl } from '../shared/baseUrl';
 
-/* import { DISHES } from '../shared/dishes'; */
-
 /*
-import * as DATA1 from '../shared/dishes';
-import * as DATA2 from '../shared/promotions';
-import * as DATA3 from '../shared/comments';
+ * Use this when just fetching from local files
+ * 
+ * import * as DATA1 from '../shared/dishes';
+ * import * as DATA2 from '../shared/promotions';
+ * import * as DATA3 from '../shared/comments';
+ *
+ * Merging above imports into one, sothat we can dynamically access it from one place.
+ * const DATA = { ...DATA1, ...DATA2, ...DATA3 };
+ */
 
-const DATA = { ...DATA1, ...DATA2, ...DATA3 };
-*/
-/*
-export const addComment = (dishId, rating, author, comment) => ({
-	type: ActionTypes.ADD_COMMENT,
-	payload: {
-		dishId: dishId,
-		rating: rating,
-		author: author,
-		comment: comment
-	}
-});
-*/
 
-/*
-export const fetchDishes = () => (dispatch) => {
-	dispatch(dishesLoading(true));
-
-	setTimeout(() => {
-		dispatch(addDishes(DISHES));
-	}, 2000);
-}
-
-export const dishesLoading = () => ({
-	type: ActionTypes.ACT.DISHES_LOADING
-});
-
-export const dishesFailed = (errmess) => ({
-	type: ActionTypes.ACT.DISHES_FAILED,
-	payload: errmess
-});
-
-export const addDishes = (dishes) => ({
-	type: ActionTypes.ACT.ADD_DISHES,
-	payload: dishes
-});
-*/
-
-/* const entities = ['DISHES', 'COMMENTS', 'PROMOTIONS', 'LEADERS']; */
-const entities = ['DISHES', 'PROMOTIONS', 'COMMENTS'];
+const entities = ['DISHES', 'PROMOTIONS', 'COMMENTS', 'LEADERS', 'FEEDBACKS'];
 export const FETCH = {};
 
 /*
- * Generate different action types: ADD, LOADING, FAILED for each given entity
- * e.g. ADD_DISHES, DISHES_LOADING, DISHES_FAILED, ADD_DISHE, POST_COMMENT
+ * Generate different actions.
  */
 function creActions() {
 	for (let i = 0; i < entities.length; i++) {
@@ -113,7 +89,7 @@ function creActions() {
 			const newData = data;
 			newData.date = new Date().toISOString();
 
-			return fetch(baseUrl + 'comments', {
+			return fetch(baseUrl + ent_lc, {
 				method: "POST",
 				body: JSON.stringify(newData),
 				headers: {
@@ -134,12 +110,14 @@ function creActions() {
 						throw error;
 					})
 				.then(response => response.json())
-				.then(response => dispatch(FETCH[entAddOne](response)))
+				.then(response => {
+					dispatch(FETCH[entAddOne](response));
+					alert(`Posted ${ent_one}: ${JSON.stringify(response)}`);
+					})
 				.catch(error => { console.log(`Error: ${entPost}`, error.message); alert(`Your ${ent_one} could not be posted\nError: ${error.message}`); });
 		};
 	}
 }
 
-console.log(FETCH);
-
 creActions();
+console.log(FETCH);

@@ -11,7 +11,6 @@ import DishDetail from './DishdetailComponent';
 import Contact from './ContactComponent';
 import Header from './HeaderComponent';
 import Footer from './FooterComponent';
-/* import { addComment, fetchDishes } from '../redux/ActionCreators'; */
 import { FETCH } from '../redux/ActionCreators';
 
 /* Create a wrapper function "withRouter" as it is deperacted in V6 */
@@ -35,11 +34,13 @@ function withRouter(Component) {
 const mapDispatchToProps = dispatch => ({
     fetchDishes: () => { dispatch(FETCH.fetchDishes()) },
     resetFeedbackForm: () => {
-        dispatch(actions.reset('feedback'))
+        dispatch(actions.reset('feedbacks'))
     },
     fetchPromotions: () => { dispatch(FETCH.fetchPromotions()) },
     fetchComments: () => { dispatch(FETCH.fetchComments()) },
-    postComment: (data) => dispatch(FETCH.postComment({ dishId: data.dishId, rating: data.rating, author: data.author, comment: data.comment }))
+    postComment: (data) => dispatch(FETCH.postComment({ dishId: data.dishId, rating: data.rating, author: data.author, comment: data.comment })),
+    fetchLeaders: () => { dispatch(FETCH.fetchLeaders()) },
+    postFeedback: (data) => dispatch(FETCH.postFeedback(data))
 });
 
 const mapStateToProps = state => {
@@ -60,18 +61,21 @@ class Main extends Component {
         this.props.fetchDishes();
         this.props.fetchPromotions();
         this.props.fetchComments();
+        this.props.fetchLeaders();
     }
 
     render() {
         const featuredDish = this.props.dishes.dishes.filter((dish) => dish.featured)[0];
         const featuredPromotion = this.props.promotions.promotions.filter((promotion) => promotion.featured)[0];
-        const featuredLeader = this.props.leaders.filter((leader) => leader.featured)[0];
+        const featuredLeader = this.props.leaders.leaders.filter((leader) => leader.featured)[0];
         const loadingDishes = this.props.dishes.isLoading;
         const errLoadingDishes = this.props.dishes.errMess;
         const loadingPromotion = this.props.promotions.isLoading;
         const errLoadingPromotion = this.props.promotions.errMess;
         const loadingComments = this.props.comments.isLoading;
         const errLoadingComments = this.props.comments.errMess;
+        const loadingLeader = this.props.leaders.isLoading;
+        const errLoadingLeader = this.props.leaders.errMess;
 
         const DishWithId = (props) => {
             var { dishId } = useParams(); /* returns corresponding param as string */
@@ -91,12 +95,12 @@ class Main extends Component {
                     <CSSTransition nodeRef={this.props.nodeRef} classNames="page" timeout={300}>
                         <Routes>
                             <Route path='/home' element={<Home dish={featuredDish} promotion={featuredPromotion} leader={featuredLeader} dishesLoading={loadingDishes} dishesErrMess={errLoadingDishes}
-                                promotionLoading={loadingPromotion} promotionErrMess={errLoadingPromotion}
+                                promotionLoading={loadingPromotion} promotionErrMess={errLoadingPromotion} leaderLoading={loadingLeader} leaderErrMess={errLoadingLeader}
                             />} />
                             <Route exact path='/aboutus' element={<About leaders={this.props.leaders} />} />
                             <Route path='/menu/:dishId' element={<DishWithId postComment={this.props.postComment} />} />
                             <Route exact path='/menu' element={<Menu dishes={this.props.dishes} />} />
-                            <Route exact path='/contactus' element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} />} />
+                            <Route exact path='/contactus' element={<Contact resetFeedbackForm={this.props.resetFeedbackForm} postFeedback={this.props.postFeedback} />} />
                             <Route path="*" element={<Navigate to="/home" replace />} />
                         </Routes>
                     </CSSTransition>

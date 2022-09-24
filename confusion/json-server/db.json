@@ -241,6 +241,14 @@
       "comment": "Spicy Pizza!",
       "date": "2022-09-23T21:55:27.656Z",
       "id": 24
+    },
+    {
+      "dishId": 3,
+      "rating": "5",
+      "author": "Sweet Nerd",
+      "comment": "So soft and delicious!",
+      "date": "2022-09-24T13:36:53.553Z",
+      "id": 25
     }
   ],
   "promotions": [
@@ -292,7 +300,7 @@
       "description": "Award winning three-star Michelin chef with wide International experience having worked closely with whos-who in the culinary world, he specializes in creating mouthwatering Indo-Italian fusion experiences. He says, Put together the cuisines from the two craziest cultures, and you get a winning hit! Amma Mia!"
     }
   ],
-  "feedback": [
+  "feedbacks": [
     {
       "firstname": "fdas",
       "lastname": "afds",
@@ -303,6 +311,72 @@
       "message": "afadsfds",
       "date": "2017-12-04T09:41:49.890Z",
       "id": 1
+    },
+    {
+      "firstname": "Super",
+      "lastname": "Taster",
+      "telnum": "(513) 576-3000",
+      "email": "taster@gmail.com",
+      "agree": "false",
+      "contactType": "Email",
+      "message": "Keep fusing different cultures!",
+      "date": "2022-09-24T14:23:35.111Z",
+      "id": 2
+    },
+    {
+      "firstname": "Sweet",
+      "lastname": "Tooth",
+      "telnum": "9818123456",
+      "email": "sweet@food.net",
+      "agree": "false",
+      "contactType": "Email",
+      "message": "Your pies are so yummy!",
+      "date": "2022-09-24T14:33:34.700Z",
+      "id": 3
+    },
+    {
+      "firstname": "Foody",
+      "lastname": "Nerd",
+      "telnum": "9812345678",
+      "email": "foody@nirvana.com",
+      "agree": "false",
+      "contactType": "Email",
+      "message": "Keep mixing them up. They taste great!",
+      "date": "2022-09-24T14:42:46.284Z",
+      "id": 4
+    },
+    {
+      "firstname": "World",
+      "lastname": "Traveller",
+      "telnum": "9990009999",
+      "email": "world@traveller.net",
+      "agree": "false",
+      "contactType": "Tel.",
+      "message": "Nice mix-ups. Keen them coming :)",
+      "date": "2022-09-24T14:52:14.678Z",
+      "id": 5
+    },
+    {
+      "firstname": "Fusion",
+      "lastname": "Taster",
+      "telnum": "1234567890",
+      "email": "fusion@taster.net",
+      "agree": "false",
+      "contactType": "Tel.",
+      "message": "What a great combination!",
+      "date": "2022-09-24T16:14:53.536Z",
+      "id": 6
+    },
+    {
+      "firstname": "Super",
+      "lastname": "Foody",
+      "telnum": "9123456789",
+      "email": "superfoody@world.com",
+      "agree": "false",
+      "contactType": "Email",
+      "message": "What a fusion! Nirvana for foodies :)",
+      "date": "2022-09-24T16:42:17.055Z",
+      "id": 7
     }
   ]
 }

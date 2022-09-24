@@ -1,3 +1,11 @@
+/*
+ * Templated the code for different action types for better reuse.
+ * To create different action for an entity, simply use it as:
+ *      Comments = ActionTemplate('comments');
+ * 
+ * Which will generate code for each of action types for given entity (e.g. comments).
+ */
+
 import * as ActionTypes from './ActionTypes';
 
 export const ActionTemplate = (entity) => (state = {
@@ -18,9 +26,7 @@ export const ActionTemplate = (entity) => (state = {
             return { ...state, isLoading: false, errMess: action.payload };
 
         case ActionTypes.ACT[`ADD_${entOne}`]:
-            var entry = action.payload;
-            entry.id = state[entity].length;
-            return { ...state, [entity]: state[entity].concat(entry) };
+            return { ...state, [entity]: state[entity].concat(action.payload) };
 
         default:
             return state;
