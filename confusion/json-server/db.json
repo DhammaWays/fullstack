@@ -377,6 +377,17 @@
       "message": "What a fusion! Nirvana for foodies :)",
       "date": "2022-09-24T16:42:17.055Z",
       "id": 7
+    },
+    {
+      "firstname": "Evergreen",
+      "lastname": "Learner",
+      "telnum": "9876543210",
+      "email": "evergreen@learner.org",
+      "agree": false,
+      "contactType": "Email",
+      "message": "This fusion is superb!",
+      "date": "2022-09-25T11:14:36.975Z",
+      "id": 8
     }
   ]
 }
