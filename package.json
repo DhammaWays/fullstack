@@ -29,12 +29,15 @@
     "usemin-cli": "^0.6.0"
   },
   "dependencies": {
+    "body-parser": "^1.20.0",
     "bootstrap": "^5.2.0",
     "bootstrap-social": "^5.1.1",
     "concat": "^1.0.3",
+    "express": "^4.18.1",
     "font-awesome": "^4.7.0",
     "glob": "^8.0.3",
     "jquery": "^3.6.1",
+    "morgan": "^1.10.0",
     "popper.js": "^1.16.1",
     "usemin": "^0.6.0"
   }
