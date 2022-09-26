@@ -1,16 +1,15 @@
 /*
- * Templated the code for different custom routers for better reuse.
- * To create a specific router for an entity, simply use it as:
- *      dishRouter = templateRouter('dishes');
- *      
- * Which will generate custom router for given entity (e.g. dishes).
+ * Using templateRouter for better code reuse across different entities (dishes, promotions, leaders)
  */
 
+/*
+ * Listing the content of "templateRouter.js" here for grader's reference.
+ * 
 const express = require('express');
 const bodyParser = require('body-parser');
 
 const templateRouter = (entity) => {
-    let entOne = entity.slice(0, -1); /* chop off last character */
+    let entOne = entity.slice(0, -1);
     if (entity.endsWith('es')) entOne = entOne.slice(0, -1);
 
     const gRouter = express.Router();
@@ -57,3 +56,9 @@ const templateRouter = (entity) => {
 }
 
 module.exports = templateRouter;
+*/
+
+const templateRouter = require('./templateRouter');
+const leaderRouter = templateRouter('leaders');
+
+module.exports = leaderRouter;
