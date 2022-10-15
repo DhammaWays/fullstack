@@ -3,11 +3,12 @@ var express = require('express');
 var path = require('path');
 //var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session');
-var FileStore = require('session-file-store')(session);
+//var session = require('express-session');
+//var FileStore = require('session-file-store')(session);
 
 var passport = require('passport');
 var authenticate = require('./authenticate');
+var config = require('./config');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -18,7 +19,7 @@ var leaderRouter = require('./routes/leaderRouter');
 // Connect to DB
 const mongoose = require('mongoose');
 
-const url = 'mongodb://127.0.0.1:27017/conFusion';
+const url = config.mongoUrl;
 const connect = mongoose.connect(url);
 
 connect.then((db) => {
@@ -35,38 +36,14 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use(session({
-    name: 'session-id',
-    secret: '12345-67890-09876-54321',
-    saveUninitialized: false,
-    resave: false,
-    store: new FileStore()
-}));
-
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Allow these routes without authentications
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-//Authentication
+//Authentication : Now moved to routes themselves!
 //app.use(cookieParser('12345-67890-09876-54321'));
-
-function auth(req, res, next) {
-    console.log(req.user);
-
-    if (!req.user) {
-        var err = new Error('You are not authenticated!');
-        err.status = 403;
-        next(err);
-    }
-    else {
-        next();
-    }
-}
-
-app.use(auth);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
