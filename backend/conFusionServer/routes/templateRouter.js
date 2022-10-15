@@ -20,6 +20,12 @@ const templateRouter = (entity) => {
         .get((req, res, next) => {
             Model.find({})
                 .then((data) => {
+                    if (entity === 'dishes')
+                        return Model.populate(data, 'comments.author');
+                    else
+                        return data;
+                })
+                .then((data) => {
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
                     res.json(data);
@@ -53,6 +59,12 @@ const templateRouter = (entity) => {
     gRouter.route('/:Id')
         .get((req, res, next) => {
             Model.findById(req.params.Id)
+                .then((data) => {
+                    if (entity === 'dishes')
+                        return Model.populate(data, 'comments.author');
+                    else
+                        return data;
+                })
                 .then((data) => {
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
