@@ -7,49 +7,93 @@
  * 
 const express = require('express');
 const bodyParser = require('body-parser');
+var authenticate = require('../authenticate');
 
 const templateRouter = (entity) => {
-    let entOne = entity.slice(0, -1);
-    if (entity.endsWith('es')) entOne = entOne.slice(0, -1);
-
     const gRouter = express.Router();
     gRouter.use(bodyParser.json());
 
+    const Model = require(`../models/${entity}`);
+
     gRouter.route('/')
-        .all((req, res, next) => {
-            res.statusCode = 200;
-            res.setHeader('Content-Type', 'text/plain');
-            next();
-        })
         .get((req, res, next) => {
-            res.end(`Will send all the ${entity} to you!`);
+            Model.find({})
+                .then((data) => {
+                    if (entity === 'dishes')
+                        return Model.populate(data, 'comments.author');
+                    else
+                        return data;
+                })
+                .then((data) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(data);
+                }, (err) => next(err))
+                .catch((err) => next(err));
         })
-        .post((req, res, next) => {
-            res.end(`Will add the ${entity}: ` + req.body.name + ' with details: ' + req.body.description);
+        .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+            Model.create(req.body)
+                .then((data) => {
+                    console.log('Created ', data);
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(data);
+                }, (err) => next(err))
+                .catch((err) => next(err));
         })
-        .put((req, res, next) => {
+        .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             res.statusCode = 403;
             res.end(`PUT operation not supported on /${entity}`);
         })
-        .delete((req, res, next) => {
-            res.end(`Deleting all ${entity}`);
+        .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+            Model.remove({})
+                .then((resp) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp);
+                }, (err) => next(err))
+                .catch((err) => next(err));
         });
 
     gRouter.route('/:Id')
         .get((req, res, next) => {
-            res.end(`Will send details of the ${entOne}: ` + req.params.Id + ' to you!');
+            Model.findById(req.params.Id)
+                .then((data) => {
+                    if (entity === 'dishes')
+                        return Model.populate(data, 'comments.author');
+                    else
+                        return data;
+                })
+                .then((data) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(data);
+                }, (err) => next(err))
+                .catch((err) => next(err));
         })
-        .post((req, res, next) => {
+        .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             res.statusCode = 403;
             res.end(`POST operation not supported on /${entity}/${req.params.Id}`);
         })
-        .put((req, res, next) => {
-            res.write(`Updating the ${entOne}: ${req.params.Id} \n`);
-            res.end(`Will update the ${entOne}: ` + req.body.name +
-                ' with details: ' + req.body.description);
+        .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+            Model.findByIdAndUpdate(req.params.Id, {
+                $set: req.body
+            }, { new: true })
+                .then((data) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(data);
+                }, (err) => next(err))
+                .catch((err) => next(err));
         })
-        .delete((req, res, next) => {
-            res.end(`Deleting ${entOne}: ` + req.params.Id);
+        .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+            Model.findByIdAndRemove(req.params.Id)
+                .then((resp) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp);
+                }, (err) => next(err))
+                .catch((err) => next(err));
         });
 
     return gRouter;
@@ -113,7 +157,7 @@ dishRouter.route('/:dishId/comments')
         res.end('PUT operation not supported on /dishes/'
             + req.params.dishId + '/comments');
     })
-    .delete(authenticate.verifyUser, (req, res, next) => {
+    .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
         Dishes.findById(req.params.dishId)
             .then((dish) => {
                 if (dish != null) {
@@ -168,6 +212,14 @@ dishRouter.route('/:dishId/comments/:commentId')
         Dishes.findById(req.params.dishId)
             .then((dish) => {
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
+
+                    // Only allow author of this comment to update it
+                    if (!dish.comments.id(req.params.commentId).author._id.equals(req.user._id)) {
+                        err = new Error('You are not the author of this comment. Only its author is allowed to update it!');
+                        err.status = 403;
+                        return next(err);
+                    }
+
                     if (req.body.rating) {
                         dish.comments.id(req.params.commentId).rating = req.body.rating;
                     }
@@ -202,6 +254,13 @@ dishRouter.route('/:dishId/comments/:commentId')
         Dishes.findById(req.params.dishId)
             .then((dish) => {
                 if (dish != null && dish.comments.id(req.params.commentId) != null) {
+
+                    // Only allow author of this comment to delete it
+                    if (!dish.comments.id(req.params.commentId).author._id.equals(req.user._id)) {
+                        err = new Error('You are not the author of this comment. Only its author is allowed to delete it!');
+                        err.status = 403;
+                        return next(err);
+                    }
 
                     dish.comments.id(req.params.commentId).remove();
                     dish.save()

@@ -9,9 +9,15 @@ var User = require('../models/user');
 
 router.use(bodyParser.json());
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+/* GET users listing. Only allowed for admin users */
+router.get('/', authenticate.verifyUser, authenticate.verifyAdmin, function(req, res, next) {
+    User.find({})
+        .then((data) => {
+            res.statusCode = 200;
+            res.setHeader('Content-Type', 'application/json');
+            res.json(data);
+        }, (err) => next(err))
+        .catch((err) => next(err));
 });
 
 // Register user
@@ -56,15 +62,36 @@ router.post('/login', passport.authenticate('local', { session: false }), (req, 
 
 // Logout
 router.get('/logout', (req, res, next) => {
+    //console.log(req);
     if (req.session) {
         req.session.destroy();
         res.clearCookie('session-id');
         res.redirect('/');
     }
     else {
-        var err = new Error('You are not logged in!');
-        err.status = 403;
-        next(err);
+        // No real concept of logging out for JWT tokens, they just expire after their expiry time!
+        const token = req.headers.authorization.split(' ')[1]; 
+        if (token) {
+            const jwt = require("jsonwebtoken");
+            const config = require('../config.js')
+            const decodedToken = jwt.decode(token, config.secretKey);
+            //console.log("Logout token: ", decodedToken);
+
+            User.findById(decodedToken._id)
+                .then((user) => {
+                    //console.log(user);
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json({ success: true, status: `${user.username} logged out!` });
+                    //res.redirect('/');
+                    
+                });
+        }
+        else {
+            var err = new Error('You are not logged in!');
+            err.status = 403;
+            next(err);
+        }
     }
 });
 

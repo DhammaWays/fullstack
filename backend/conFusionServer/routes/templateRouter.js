@@ -32,7 +32,7 @@ const templateRouter = (entity) => {
                 }, (err) => next(err))
                 .catch((err) => next(err));
         })
-        .post(authenticate.verifyUser, (req, res, next) => {
+        .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             Model.create(req.body)
                 .then((data) => {
                     console.log('Created ', data);
@@ -42,11 +42,11 @@ const templateRouter = (entity) => {
                 }, (err) => next(err))
                 .catch((err) => next(err));
         })
-        .put(authenticate.verifyUser, (req, res, next) => {
+        .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             res.statusCode = 403;
             res.end(`PUT operation not supported on /${entity}`);
         })
-        .delete(authenticate.verifyUser, (req, res, next) => {
+        .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             Model.remove({})
                 .then((resp) => {
                     res.statusCode = 200;
@@ -72,11 +72,11 @@ const templateRouter = (entity) => {
                 }, (err) => next(err))
                 .catch((err) => next(err));
         })
-        .post(authenticate.verifyUser, (req, res, next) => {
+        .post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             res.statusCode = 403;
             res.end(`POST operation not supported on /${entity}/${req.params.Id}`);
         })
-        .put(authenticate.verifyUser, (req, res, next) => {
+        .put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             Model.findByIdAndUpdate(req.params.Id, {
                 $set: req.body
             }, { new: true })
@@ -87,7 +87,7 @@ const templateRouter = (entity) => {
                 }, (err) => next(err))
                 .catch((err) => next(err));
         })
-        .delete(authenticate.verifyUser, (req, res, next) => {
+        .delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
             Model.findByIdAndRemove(req.params.Id)
                 .then((resp) => {
                     res.statusCode = 200;
