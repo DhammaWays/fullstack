@@ -107,5 +107,4 @@ router.get('/logout', cors.corsWithOptions, (req, res, next) => {
     }
 });
 
-
 module.exports = router;

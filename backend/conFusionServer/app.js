@@ -15,8 +15,8 @@ var usersRouter = require('./routes/users');
 var dishRouter = require('./routes/dishRouter');
 var promoRouter = require('./routes/promoRouter');
 var leaderRouter = require('./routes/leaderRouter');
-
 const uploadRouter = require('./routes/uploadRouter');
+const favoriteRouter = require('./routes/favoriteRouter');
 
 // Connect to DB
 const mongoose = require('mongoose');
@@ -50,11 +50,10 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(passport.initialize());
 
-// Allow these routes without authentications
+//Authentication : Now moved to routes themselves!
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-//Authentication : Now moved to routes themselves!
 //app.use(cookieParser('12345-67890-09876-54321'));
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,8 +61,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/dishes', dishRouter);
 app.use('/promotions', promoRouter);
 app.use('/leaders', leaderRouter);
-
 app.use('/imageUpload', uploadRouter);
+app.use('/favorites', favoriteRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
